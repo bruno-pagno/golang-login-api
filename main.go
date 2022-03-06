@@ -1,10 +1,20 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"github.com/gorilla/mux"
+	_ "github.com/lib/pq"
 	"log"
 	"net/http"
+)
+
+const (
+	host     = "localhost"
+	port     = 5432
+	user     = "postgres"
+	password = "postgres"
+	dbname   = "accounts"
 )
 
 func healthCheckHandler(w http.ResponseWriter, r *http.Request) {
@@ -20,6 +30,18 @@ func signUpHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	fmt.Println("Connecting to the database")
+
+	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
+		host, port, user, password, dbname)
+
+	_, err := sql.Open("postgres", psqlInfo)
+	if err != nil {
+		panic(err)
+	} else {
+		fmt.Println("Sucessfully connected to the database")
+	}
+
 	fmt.Println("Starting server...")
 	router := mux.NewRouter()
 	router.HandleFunc("/", healthCheckHandler).Methods("GET")
