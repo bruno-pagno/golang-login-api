@@ -47,5 +47,5 @@ func main() {
 	router.HandleFunc("/", healthCheckHandler).Methods("GET")
 	router.HandleFunc("/signin", signInHandler).Methods("POST")
 	router.HandleFunc("/signup", signUpHandler).Methods("POST")
-	log.Fatal(http.ListenAndServe("localhost:8080", router))
+	log.Fatal(http.ListenAndServe(":8080", router))
 }
