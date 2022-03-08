@@ -4,17 +4,11 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/gorilla/mux"
+	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	"log"
 	"net/http"
-)
-
-const (
-	host     = "localhost"
-	port     = 5432
-	user     = "postgres"
-	password = "postgres"
-	dbname   = "accounts"
+	"os"
 )
 
 func healthCheckHandler(w http.ResponseWriter, r *http.Request) {
@@ -30,7 +24,16 @@ func signUpHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	if godotenv.Load(".env") != nil {
+		log.Fatal("Error loading .env file")
+	}
+
 	fmt.Println("Connecting to the database")
+	host := os.Getenv("POSTGRES_HOST")
+	port := os.Getenv("POSTGRES_PORT")
+	user := os.Getenv("POSTGRES_USER")
+	password := os.Getenv("POSTGRES_PASSWORD")
+	dbname := os.Getenv("POSTGRES_DB")
 
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)
