@@ -11,5 +11,3 @@ COPY *.go ./
 RUN go build -o /output
 
 CMD ["/output"]
-
-EXPOSE 8080 8080
